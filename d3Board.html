@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+
+<html>
+<head>
+  <title> Cryptocurrency Data</title>
+
+  <style>
+    /* Style for the tooltip */
+    .tooltip {
+      position: absolute;
+      pointer-events: none;
+      background-color: white;
+      border: solid;
+      border-width: 2px;
+      border-radius: 5px;
+      padding: 5px;
+      font-size: 12px;
+      z-index: 1;
+    }
+  </style>
+
+  <!-- Load D3.js -->
+  <script defer src="https://d3js.org/d3.v6.min.js"></script>
+  <script defer src="scripts/d3Script.js"></script>
+</head>
+
+<body>
+  <!-- Create an element where the bar chart will take place -->
+  <div id="graphBar"></div>
+
+  <!-- Create an element where the pie chart will take place -->
+  <div id="graphPie"></div>
+
+</body>
+</html>
