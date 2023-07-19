@@ -36,10 +36,10 @@ async function createTop5CryptoPricePlot() {
     Plotly.newPlot('top-5-crypto-price', [trace], layout);
 }
 
-// Function to plot the top 10 currencies with price
-async function createTop10CryptoPricePlot() {
+// Function to plot the 5 most expenive cryptocurrencies
+async function createMostExpensiveCryptoPlot() {
     const data = await fetchData();  
-    const top10Crypto = sortByAttribute(data, "price").slice(0, 10);
+    const top10Crypto = sortByAttribute(data, "price").slice(0, 5);
 
     const trace = {
       x: top10Crypto.map(crypto => crypto.name),
@@ -48,7 +48,7 @@ async function createTop10CryptoPricePlot() {
     };
   
     const layout = {
-      title: 'Top 10 Cryptocurrencies By Price',
+      title: 'Most Expensive Cryptocurrencies',
       yaxis: {
         title: 'Price (USD)',
       },
@@ -87,6 +87,6 @@ async function createTop5CryptoByVolumePieChart() {
   
 // Call the functions to create the plots
 createTop5CryptoPricePlot();
-createTop10CryptoPricePlot();
+createMostExpensiveCryptoPlot();
 createTop5CryptoByVolumePieChart();
   
