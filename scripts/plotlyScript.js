@@ -1,3 +1,4 @@
+//Helper Functions
 const parseNumbers = (str) => parseFloat((str || "0").replace(/[^0-9.]/g, ""));
 const sortByAttribute = (array, attribute) => array.slice().sort((a, b) => b[attribute] - a[attribute]);
 
