@@ -15,35 +15,32 @@ async function fetchData() {
   
 // Function to plot the price of the top 5 cryptocurrencies
 async function createTop5CryptoPricePlot() {
+  const data = await fetchData();
+  const top5Crypto = data.slice(0, 5);
+  const trace = {
+    x: top5Crypto.map(crypto => crypto.name),
+    y: top5Crypto.map(crypto => crypto.price),
+    type: 'bar',
+  };
 
-    const data = await fetchData();
+  const layout = {
+    title: 'Top 5 Cryptocurrencies Price',
+    yaxis: {
+      title: 'Price (USD)',
+    },
+  };
 
-    const top5Crypto = data.slice(0, 5);
-
-    const trace = {
-      x: top5Crypto.map(crypto => crypto.name),
-      y: top5Crypto.map(crypto => crypto.price),
-      type: 'bar',
-    };
-
-    const layout = {
-      title: 'Top 5 Cryptocurrencies Price',
-      yaxis: {
-        title: 'Price (USD)',
-      },
-    };
-
-    Plotly.newPlot('top-5-crypto-price', [trace], layout);
+  Plotly.newPlot('top-5-crypto-price', [trace], layout);
 }
 
 // Function to plot the 5 most expenive cryptocurrencies
 async function createMostExpensiveCryptoPlot() {
     const data = await fetchData();  
-    const top10Crypto = sortByAttribute(data, "price").slice(0, 5);
+    const top5Crypto = sortByAttribute(data, "price").slice(0, 6);
 
     const trace = {
-      x: top10Crypto.map(crypto => crypto.name),
-      y: top10Crypto.map(crypto => crypto.price),
+      x: top5Crypto.map(crypto => crypto.name),
+      y: top5Crypto.map(crypto => crypto.price),
       type: 'bar',
     };
   
@@ -54,7 +51,7 @@ async function createMostExpensiveCryptoPlot() {
       },
     };
   
-    Plotly.newPlot('top-10-crypto-by-price', [trace], layout);
+    Plotly.newPlot('top-5-crypto-by-price', [trace], layout);
 }
   
 // Function to create the pie chart showing top 5 cryptocurrencies by volume
@@ -75,7 +72,8 @@ async function createTop5CryptoByVolumePieChart() {
     const trace = {
         values: pie_data.map(e => e.volume),
         labels: pie_data.map(e => e.name),
-        type: 'pie'
+        type: 'pie',
+        hoverinfo: 'label+percent',
     };
         
     const layout = {
