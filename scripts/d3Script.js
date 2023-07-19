@@ -13,18 +13,16 @@ async function fetchData() {
     return converted;
 }
 
-// Function to create the bar chart showing the most expensive cryptocurrencies
 async function createTopCurrenciesPriceBarChart() {
   const data = await fetchData();
 
   // Sort the data by price in descending order
   const top5Crypto = data.slice(0, 6);
 
-  // set the dimensions and margins of the graph
-  var margin = {top: 30, right: 30, bottom: 70, left: 60},
-  width = 460 - margin.left - margin.right,
-  height = 400 - margin.top - margin.bottom;
-
+  // Set the dimensions and margins of the graph
+  var margin = { top: 30, right: 30, bottom: 70, left: 60 },
+    width = 460 - margin.left - margin.right,
+    height = 400 - margin.top - margin.bottom;
 
   const svg = d3.select("#top-5-crypto-price").append("svg")
     .attr("width", width + margin.left + margin.right)
@@ -32,13 +30,13 @@ async function createTopCurrenciesPriceBarChart() {
     .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-    // X axis
-    var x = d3.scaleBand()
-    .range([ 0, width ])
+  // X axis
+  var x = d3.scaleBand()
+    .range([0, width])
     .domain(top5Crypto.map(function(d) { return d.name; }))
     .padding(0.2);
-    
-    svg.append("g")
+
+  svg.append("g")
     .attr("transform", "translate(0," + height + ")")
     .call(d3.axisBottom(x))
     .selectAll("text")
@@ -47,13 +45,14 @@ async function createTopCurrenciesPriceBarChart() {
 
   // Add Y axis
   var y = d3.scaleLinear()
-    .domain([0,  d3.max(top5Crypto, crypto => crypto.price)])
-    .range([ height, 0]);
+    .domain([0, d3.max(top5Crypto, crypto => crypto.price)])
+    .range([height, 0]);
 
   svg.append("g")
      .call(d3.axisLeft(y));
-  
-    svg.selectAll(".bar")
+
+  // Add bars
+  svg.selectAll(".bar")
     .data(top5Crypto)
     .enter().append("rect")
     .attr("class", "bar")
@@ -61,92 +60,122 @@ async function createTopCurrenciesPriceBarChart() {
     .attr("y", crypto => y(crypto.price))
     .attr("width", x.bandwidth())
     .attr("height", crypto => height - y(crypto.price))
-    .attr("fill", "steelblue");
+    .attr("fill", "steelblue")
+    .on("mouseover", function(d) {
+      // Show tooltip on mouseover
+      d3.select("#tooltip")
+        .style("visibility", "visible")
+        .html(`<strong>${d.name}</strong><br>Price: $${d.price.toFixed(2)}`);
+    })
+    .on("mousemove", function() {
+      // Position tooltip next to the cursor
+      d3.select("#tooltip")
+        .style("top", (d3.event.pageY - 10) + "px")
+        .style("left", (d3.event.pageX + 10) + "px");
+    })
+    .on("mouseout", function() {
+      // Hide tooltip on mouseout
+      d3.select("#tooltip").style("visibility", "hidden");
+    });
 
-  // Bars
-  svg.selectAll("mybar")
-  .data(top5Crypto)
-  .enter()
-  .append("rect")
-  .attr("x", function(d) { return x(d.name); })
-  .attr("y", function(d) { return y(d.price); })
-  .attr("width", x.bandwidth())
-  .attr("height", function(d) { return height - y(d.Value); })
-  .attr("fill", "#69b3a2")
-
+  // Create tooltip element
+  d3.select("#top-5-crypto-price")
+    .append("div")
+    .attr("id", "tooltip")
+    .style("position", "absolute")
+    .style("z-index", "10")
+    .style("visibility", "hidden")
+    .style("background-color", "rgba(0, 0, 0, 0.7)")
+    .style("color", "white")
+    .style("padding", "5px")
+    .style("border-radius", "5px");
 }
 
 
-// Function to create the bar chart showing the most expensive cryptocurrencies
 async function createMostExpensiveCurrenciesBarChart() {
-    const data = await fetchData();
-  
-    // Sort the data by price in descending order
-    const top5Crypto = sortByAttribute(data, "price").slice(0, 6);
-  
-    // set the dimensions and margins of the graph
-    var margin = {top: 30, right: 30, bottom: 70, left: 60},
+  const data = await fetchData();
+
+  // Sort the data by price in descending order
+  const top5Crypto = data.slice().sort((a, b) => b.price - a.price).slice(0, 6);
+
+  // Set the dimensions and margins of the graph
+  var margin = { top: 30, right: 30, bottom: 90, left: 60 },
     width = 460 - margin.left - margin.right,
-    height = 400 - margin.top - margin.bottom;
+    height = 470 - margin.top - margin.bottom;
 
-  
-    const svg = d3.select("#top-5-crypto-by-price").append("svg")
-      .attr("width", width + margin.left + margin.right)
-      .attr("height", height + margin.top + margin.bottom)
-      .append("g")
-      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-  
-      // X axis
-      var x = d3.scaleBand()
-      .range([ 0, width ])
-      .domain(top5Crypto.map(function(d) { return d.name; }))
-      .padding(0.2);
-      
-      svg.append("g")
-      .attr("transform", "translate(0," + height + ")")
-      .call(d3.axisBottom(x))
-      .selectAll("text")
-      .attr("transform", "translate(-10,0)rotate(-45)")
-      .style("text-anchor", "end");
+  const svg = d3.select("#top-5-crypto-by-price").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-    // Add Y axis
-    var y = d3.scaleLinear()
-      .domain([0,  d3.max(top5Crypto, crypto => crypto.price)])
-      .range([ height, 0]);
+  // X axis
+  var x = d3.scaleBand()
+    .range([0, width])
+    .domain(top5Crypto.map(function(d) { return d.name; }))
+    .padding(0.2);
+
+  svg.append("g")
+    .attr("transform", "translate(0," + height + ")")
+    .call(d3.axisBottom(x))
+    .selectAll("text")
+    .attr("transform", "translate(-10,0)rotate(-45)")
+    .style("text-anchor", "end");
+
+  // Add Y axis
+  var y = d3.scaleLinear()
+    .domain([0, d3.max(top5Crypto, crypto => crypto.price)])
+    .range([height, 0]);
 
     svg.append("g")
-       .call(d3.axisLeft(y));
-    
-      svg.selectAll(".bar")
-      .data(top5Crypto)
-      .enter().append("rect")
-      .attr("class", "bar")
-      .attr("x", crypto => x(crypto.name))
-      .attr("y", crypto => y(crypto.price))
-      .attr("width", x.bandwidth())
-      .attr("height", crypto => height - y(crypto.price))
-      .attr("fill", "steelblue");
+    .call(d3.axisLeft(y).ticks(7));
 
-    // Bars
-    svg.selectAll("mybar")
+  // Add bars
+  svg.selectAll(".bar")
     .data(top5Crypto)
-    .enter()
-    .append("rect")
-    .attr("x", function(d) { return x(d.name); })
-    .attr("y", function(d) { return y(d.price); })
+    .enter().append("rect")
+    .attr("class", "bar")
+    .attr("x", crypto => x(crypto.name))
+    .attr("y", crypto => y(crypto.price))
     .attr("width", x.bandwidth())
-    .attr("height", function(d) { return height - y(d.Value); })
-    .attr("fill", "#69b3a2")
+    .attr("height", crypto => height - y(crypto.price))
+    .attr("fill", "steelblue")
+    .on("mouseover", function(d) {
+      // Show tooltip on mouseover
+      d3.select("#tooltip")
+        .style("visibility", "visible")
+        .html(`<strong>${d.name}</strong><br>Price: $${d.price.toFixed(2)}`);
+    })
+    .on("mousemove", function() {
+      // Position tooltip next to the cursor
+      d3.select("#tooltip")
+        .style("top", (d3.event.pageY - 10) + "px")
+        .style("left", (d3.event.pageX + 10) + "px");
+    })
+    .on("mouseout", function() {
+      // Hide tooltip on mouseout
+      d3.select("#tooltip").style("visibility", "hidden");
+    });
 
-  }
+  // Create tooltip element
+  d3.select("#top-5-crypto-by-price")
+    .append("div")
+    .attr("id", "tooltip")
+    .style("position", "absolute")
+    .style("z-index", "10")
+    .style("visibility", "hidden")
+    .style("background-color", "rgba(0, 0, 0, 0.7)")
+    .style("color", "white")
+    .style("padding", "5px")
+    .style("border-radius", "5px");
+}
 
   
-// Function to create the pie chart showing top 3 cryptocurrencies by volume
 async function createTop3CryptoByVolumePieChart() {
-  var data = await fetchData()
+  var data = await fetchData();
 
   const top_3data = data.slice(0, 3);
-  console.log(top_3data)
+
   // Calculate the total volume of other cryptocurrencies (excluding the top 3)
   const other_volume = data.slice(3).reduce((sum, currency) => sum + currency.volume, 0);
 
@@ -156,66 +185,92 @@ async function createTop3CryptoByVolumePieChart() {
     { name: 'Others', volume: other_volume }
   ];
 
-  const data_dict = {};
-  pie_data.forEach((e) => {
-    data_dict[e.name] = e.volume;
-  });
+  const totalVolume = data.reduce((sum, currency) => sum + currency.volume, 0);
 
-// set the dimensions and margins of the graph
-var width = 450,
-height = 450,
-margin = 40;
+  // set the dimensions and margins of the graph
+  var width = 450,
+    height = 450,
+    margin = 40;
 
-// The radius of the pieplot is half the width or half the height (smallest one). I subtract a bit of margin.
-var radius = Math.min(width, height) / 2 - margin
+  // The radius of the pie plot is half the width or half the height (smallest one). I subtract a bit of margin.
+  var radius = Math.min(width, height) / 2 - margin;
 
-// append the svg object to the div
-var svg = d3.select("#top-3-crypto-volume")
-.append("svg")
-.attr("width", width)
-.attr("height", height)
-.append("g")
-.attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+  // append the svg object to the div
+  var svg = d3.select("#top-3-crypto-volume")
+    .append("svg")
+    .attr("width", width)
+    .attr("height", height)
+    .append("g")
+    .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
-// set the color scale
-var color = d3.scaleOrdinal()
-  .domain(data_dict)
-  .range(d3.schemeSet2);
+  // set the color scale
+  var color = d3.scaleOrdinal()
+    .domain(pie_data.map(d => d.name))
+    .range(d3.schemeSet2);
 
-// Compute the position of each group on the pie:
-var pie = d3.pie()
-  .value(function(d) {return d.value; })
-var data_ready = pie(d3.entries(data_dict))
-// Now I know that group A goes from 0 degrees to x degrees and so on.
+  // Compute the position of each group on the pie
+  var pie = d3.pie()
+    .value(function(d) { return d.volume; });
+  var data_ready = pie(pie_data);
 
-// shape helper to build arcs:
-var arcGenerator = d3.arc()
-  .innerRadius(0)
-  .outerRadius(radius)
+  // shape helper to build arcs
+  var arcGenerator = d3.arc()
+    .innerRadius(0)
+    .outerRadius(radius);
 
-// Build the pie chart: Basically, each part of the pie is a path that we build using the arc function.
-svg
-.selectAll('mySlices')
-.data(data_ready)
-.enter()
-.append('path')
-.attr('d', arcGenerator)
-.attr('fill', function(d){ return(color(d.data.key)) })
-.attr("stroke", "black")
-.style("stroke-width", "2px")
-.style("opacity", 0.7)
+  // Build the pie chart: Basically, each part of the pie is a path that we build using the arc function.
+  var slices = svg.selectAll('mySlices')
+    .data(data_ready)
+    .enter()
+    .append('g')
+    .attr('class', 'slice');
 
-// Now add the annotation. Use the centroid method to get the best coordinates
-svg
-.selectAll('mySlices')
-.data(data_ready)
-.enter()
-.append('text')
-.text(function(d){ return d.data.key})
-.attr("transform", function(d) { return "translate(" + arcGenerator.centroid(d) + ")";  })
-.style("text-anchor", "middle")
-.style("font-size", 17)
+  slices.append('path')
+    .attr('d', arcGenerator)
+    .attr('fill', function(d) { return color(d.data.name); })
+    .attr("stroke", "black")
+    .style("stroke-width", "2px")
+    .style("opacity", 0.7)
+    .on("mouseover", function(d) {
+      // Show tooltip on mouseover
+      const percentage = (d.value / totalVolume) * 100;
+      d3.select("#tooltip")
+        .style("visibility", "visible")
+        .html(`<strong>${d.data.name}</strong><br>Percentage: ${percentage.toFixed(1)}%`);
+    })
+    .on("mousemove", function() {
+      // Position tooltip next to the cursor
+      d3.select("#tooltip")
+        .style("top", (d3.event.pageY - 10) + "px")
+        .style("left", (d3.event.pageX + 10) + "px");
+    })
+    .on("mouseout", function() {
+      // Hide tooltip on mouseout
+      d3.select("#tooltip").style("visibility", "hidden");
+    });
 
+  // Add the annotation (rotated text) inside each slice
+  slices.append('text')
+    .attr("transform", function(d) {
+      var angle = (d.startAngle + d.endAngle) / 2;
+      var rotate = (angle < Math.PI) ? angle : angle + Math.PI; // Choose rotation direction based on quadrant
+      return "translate(" + arcGenerator.centroid(d) + ") rotate(" + (rotate * 180 / Math.PI - 90) + ")";
+    })
+    .attr("text-anchor", "middle")
+    .text(function(d) { return d.data.name; })
+    .style("font-size", 14);
+
+  // Create tooltip element
+  d3.select("#top-3-crypto-volume")
+    .append("div")
+    .attr("id", "tooltip")
+    .style("position", "absolute")
+    .style("z-index", "10")
+    .style("visibility", "hidden")
+    .style("background-color", "rgba(0, 0, 0, 0.7)")
+    .style("color", "white")
+    .style("padding", "5px")
+    .style("border-radius", "5px");
 }
   
   // Call the functions to create the plots
