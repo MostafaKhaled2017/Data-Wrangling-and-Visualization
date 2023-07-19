@@ -12,11 +12,11 @@ async function fetchData() {
     return converted;
 }
   
-// Function to plot the price of the top 10 ranked crypto currencies
+// Function to plot the top 10 currencies with price
 async function createTop10CryptoPricePlot() {
     const data = await fetchData();  
     const top10Crypto = sortByAttribute(data, "price").slice(0, 10);
-    
+
     const trace = {
       x: top10Crypto.map(crypto => crypto.name),
       y: top10Crypto.map(crypto => crypto.price),
@@ -24,16 +24,13 @@ async function createTop10CryptoPricePlot() {
     };
   
     const layout = {
-      title: 'Top 10 Cryptocurrencies Price',
-      xaxis: {
-        title: 'Cryptocurrency',
-      },
+      title: 'Top 10 Cryptocurrencies By Price',
       yaxis: {
         title: 'Price (USD)',
       },
     };
   
-    Plotly.newPlot('top-10-crypto-price', [trace], layout);
+    Plotly.newPlot('top-10-crypto-by-price', [trace], layout);
 }
   
 // Function to create the pie chart showing top 5 cryptocurrencies by volume
@@ -52,7 +49,7 @@ async function createTop5CryptoByVolumePieChart() {
         title: "Top 5 Crypto By Volume",
     };
         
-    Plotly.newPlot('top-5-crypto-volume', [trace], layout);  
+    Plotly.newPlot('top-5-crypto-by-volume', [trace], layout);  
 }
   
 // Call the functions to create the plots
