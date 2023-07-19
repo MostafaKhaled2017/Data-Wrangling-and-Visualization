@@ -13,6 +13,29 @@ async function fetchData() {
     return converted;
 }
   
+// Function to plot the price of the top 5 cryptocurrencies
+async function createTop5CryptoPricePlot() {
+
+    const data = await fetchData();
+
+    const top5Crypto = data.slice(0, 5);
+
+    const trace = {
+      x: top5Crypto.map(crypto => crypto.name),
+      y: top5Crypto.map(crypto => crypto.price),
+      type: 'bar',
+    };
+
+    const layout = {
+      title: 'Top 5 Cryptocurrencies Price',
+      yaxis: {
+        title: 'Price (USD)',
+      },
+    };
+
+    Plotly.newPlot('top-5-crypto-price', [trace], layout);
+}
+
 // Function to plot the top 10 currencies with price
 async function createTop10CryptoPricePlot() {
     const data = await fetchData();  
@@ -38,22 +61,32 @@ async function createTop10CryptoPricePlot() {
 async function createTop5CryptoByVolumePieChart() {
     const data = (await fetchData())
 
-    top_5data = sortByAttribute(data, "volume").slice(0, 5);
+    const top_5data = data.slice(0, 5);
+
+    // Calculate the total volume of other cryptocurrencies (excluding the top 5)
+    const other_volume = data.slice(5).reduce((sum, currency) => sum + currency.volume, 0);
+
+    // Create a new array for the pie chart data, including the top 5 and "Others"
+    const pie_data = [
+      ...top_5data,
+      { name: 'Others', volume: other_volume }
+    ];
 
     const trace = {
-        values: top_5data.map(e => e.volume),
-        labels: top_5data.map(e => e.name),
+        values: pie_data.map(e => e.volume),
+        labels: pie_data.map(e => e.name),
         type: 'pie'
     };
         
     const layout = {
-        title: "Top 5 Crypto By Volume",
+        title: "Top 5 Crypto Volume",
     };
         
-    Plotly.newPlot('top-5-crypto-by-volume', [trace], layout);  
+    Plotly.newPlot('top-5-crypto-volume', [trace], layout);  
 }
   
 // Call the functions to create the plots
+createTop5CryptoPricePlot();
 createTop10CryptoPricePlot();
 createTop5CryptoByVolumePieChart();
   
