@@ -1,47 +1,65 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Cryptocurrency Plots</title>
-  <link rel="stylesheet" href="https://cdn.plot.ly/plotly-2.9.0.min.css">
-  <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body>
-  <div class="w-full py-[90px] bg-sky-100">
-    <h1 class="md:w-[70%] sm:w-full md:px-0 sm:px-[40px] m-auto text-5xl font-bold mb-[30px] text-sky-950">Insights from the Cryptocurrency Market</h1>
-    <div class="md:w-[70%] sm:w-full md:px-0 sm:px-[40px] md:m-auto sm:m-0 grid lg:grid-cols-2 md:grid-cols-1 gap-[10px] sm:grid-cols-1 overflow-hidden">
-      
-      <div class="bg-white flex flex-col rounded-sm shadow-md overflow-hidden h-[max-content] justify-between">
-        <div id="top-5-crypto-by-price"></div>
-        <div class="relative z-[10]">
-          <p class="m-[40px] -mt-[1px] pt-1 text-[14px] font-light leading-tight text-sky-700 border-t-2 text-justify">
-          A graph that shows the most expensive Cryptocurrencies.
-          </p>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Cryptocurrency Plots</title>
+    <link rel="stylesheet" href="https://cdn.plot.ly/plotly-2.9.0.min.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body>
+    <div class="w-full py-[90px] bg-sky-100">
+      <h1
+        class="md:w-[70%] sm:w-full md:px-0 sm:px-[40px] m-auto text-5xl font-bold mb-[30px] text-sky-950"
+      >
+        Insights from the Cryptocurrency Market
+      </h1>
+      <div
+        class="md:w-[70%] sm:w-full md:px-0 sm:px-[40px] md:m-auto sm:m-0 grid lg:grid-cols-2 md:grid-cols-1 gap-[10px] sm:grid-cols-1 overflow-hidden"
+      >
+        <div
+          class="bg-white flex flex-col rounded-sm shadow-md overflow-hidden h-[max-content] justify-between"
+        >
+          <div id="top-5-crypto-by-price"></div>
+          <div class="relative z-[10]">
+            <p
+              class="m-[40px] mt-[20px] pt-1 text-[14px] font-light leading-tight text-sky-700 border-t-2 text-justify"
+            >
+              A graph that shows the most expensive Cryptocurrencies.
+            </p>
+          </div>
         </div>
-      </div>
 
-      <div class="bg-white flex flex-col rounded-sm shadow-md overflow-hidden justify-between">
-        <div id="top-3-crypto-volume"></div>
-        <div class="relative z-[10]">
-          <p class="m-[40px] -mt-[1px] pt-1 text-[14px] font-light leading-tight text-sky-700 border-t-2 text-justify">
-          A pie chart which shows the volume of the top ranked 3 Cryptocurrencies and the volume of the rest of the Cryptocurrencies combined..
-          </p>
+        <div
+          class="bg-white flex flex-col rounded-sm shadow-md overflow-hidden justify-between"
+        >
+          <div id="top-3-crypto-volume"></div>
+          <div class="relative z-[10]">
+            <p
+              class="m-[40px] -mt-[1px] pt-1 text-[14px] font-light leading-tight text-sky-700 border-t-2 text-justify"
+            >
+              A pie chart which shows the volume of the top ranked 3
+              Cryptocurrencies and the volume of the rest of the
+              Cryptocurrencies combined.
+            </p>
+          </div>
         </div>
-      </div>
-      
-      <div class="bg-white flex flex-col rounded-sm shadow-md overflow-hidden justify-between">
-        <div id="top-5-crypto-price"></div>
-        <div class="relative z-[10]">
-          <p class="m-[40px] -mt-[1px] pt-1 text-[14px] font-light leading-tight text-sky-700 border-t-2 text-justify"> 
-          A graph that shows the price of the top ranked 5 Cryptocurrencies.  
-          </p>
-        </div>
-      </div>
 
+        <div
+          class="bg-white flex flex-col rounded-sm shadow-md overflow-hidden justify-between"
+        >
+          <div id="top-5-crypto-price"></div>
+          <div class="relative z-[10]">
+            <p
+              class="m-[40px] -mt-[1px] pt-1 text-[14px] font-light leading-tight text-sky-700 border-t-2 text-justify"
+            >
+              A graph that shows the price of the top ranked 5 Cryptocurrencies.
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
-  </div>
 
-  <script defer src="https://cdn.plot.ly/plotly-2.9.0.min.js"></script>
-  <script defer src="scripts/plotlyScript.js"></script>
-</body>
+    <script defer src="https://cdn.plot.ly/plotly-2.9.0.min.js"></script>
+    <script defer src="scripts/plotlyScript.js"></script>
+  </body>
 </html>
